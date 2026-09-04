@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copywriting & Tone Transformer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=99">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='assets/favicon.svg') }}">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <header class="topbar">
+<div class="brand">
+    <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="Tone Craft Logo" class="brand-logo">
+    <span class="brand-text">
+        <span class="tone-text">Tone</span><span class="craft-text">Craft</span>
+    </span>
+</div>
+        <button id="theme_toggle" class="icon-btn" title="Toggle theme">🌙</button>
+    </header>
+
+    <main class="main-grid">
+
+        <!-- LEFT: FORM -->
+        <section class="panel form-panel">
+            <h1>Generate Marketing Copy</h1>
+            <p class="subtitle">Turn a raw product description into platform-ready copy.</p>
+
+            <div class="field">
+                <label>Product Name</label>
+                <input type="text" id="product_name" placeholder="e.g. SmartFit Water Bottle">
+            </div>
+
+            <div class="field">
+                <label>Product Description</label>
+                <textarea id="description" rows="4" placeholder="e.g. Just launched my new app after 6 months of solo building. It's for freelancers who want to track their income without spreadsheets."></textarea>
+            </div>
+
+            <div class="split-fields">
+                <div class="field">
+                    <label>Platforms</label>
+                    <div class="card-grid" id="platform_tabs">
+                        <button class="card-btn active" data-value="Instagram">
+                            <span class="card-icon icon-instagram">📸</span>
+                            <span class="card-label">Instagram</span>
+                        </button>
+                        <button class="card-btn" data-value="TikTok">
+                            <span class="card-icon icon-tiktok">🎵</span>
+                            <span class="card-label">TikTok</span>
+                        </button>
+                        <button class="card-btn" data-value="LinkedIn">
+                            <span class="card-icon icon-linkedin">💼</span>
+                            <span class="card-label">LinkedIn</span>
+                        </button>
+                        <button class="card-btn" data-value="Twitter">
+                            <span class="card-icon icon-twitter">✕</span>
+                            <span class="card-label">X / Twitter</span>
+                        </button>
+                        <button class="card-btn" data-value="Facebook">
+                            <span class="card-icon icon-facebook">📘</span>
+                            <span class="card-label">Facebook</span>
+                        </button>
+                        <button class="card-btn" data-value="Email">
+                            <span class="card-icon icon-email">📧</span>
+                            <span class="card-label">Email</span>
+                        </button>
+                        <button class="card-btn" data-value="GitHub">
+                            <span class="card-icon icon-github">💻</span>
+                            <span class="card-label">GitHub</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Tone</label>
+                    <div class="list-group" id="tone_tabs">
+                        <button class="list-btn active" data-value="Witty">
+                            <span class="list-icon">⚡</span>
+                            <span class="list-label">Witty</span>
+                            <span class="list-dot"></span>
+                        </button>
+                        <button class="list-btn" data-value="Professional">
+                            <span class="list-icon">◆</span>
+                            <span class="list-label">Professional</span>
+                            <span class="list-dot"></span>
+                        </button>
+                        <button class="list-btn" data-value="Persuasive">
+                            <span class="list-icon">✦</span>
+                            <span class="list-label">Persuasive</span>
+                            <span class="list-dot"></span>
+                        </button>
+                        <button class="list-btn" data-value="Friendly">
+                            <span class="list-icon">~</span>
+                            <span class="list-label">Friendly</span>
+                            <span class="list-dot"></span>
+                        </button>
+                        <button class="list-btn" data-value="Luxury">
+                            <span class="list-icon">◇</span>
+                            <span class="list-label">Luxury</span>
+                            <span class="list-dot"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field slider-field">
+                <label>Temperature <span class="slider-val" id="temp_val">0.7</span></label>
+                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                <div class="slider-hint">Lower = focused, Higher = creative</div>
+            </div>
+
+            <div class="field slider-field">
+                <label>Top_P <span class="slider-val" id="top_p_val">0.9</span></label>
+                <input type="range" id="top_p" min="0" max="1" step="0.1" value="0.9">
+                <div class="slider-hint">Controls word choice diversity</div>
+            </div>
+
+            <button id="generate_btn" class="primary-btn">
+                <span id="btn_text">Generate Copy 🚀</span>
+                <span id="btn_spinner" class="spinner hidden"></span>
+            </button>
+        </section>
+
+        <!-- RIGHT: OUTPUT -->
+        <section class="panel output-panel">
+            <div class="output-header">
+                <h2>Generated Copy</h2>
+                <div class="output-actions">
+                    <span id="char_count" class="char-count">0 chars</span>
+                    <button id="copy_btn" class="ghost-btn" title="Copy to clipboard">📋 Copy</button>
+                </div>
+            </div>
+
+            <div id="output_box" class="output-box">
+                <p class="placeholder">Your generated marketing copy will appear here ✨</p>
+            </div>
+
+            <div class="history-section">
+                <div class="history-header">
+                    <h3>History</h3>
+                    <button id="clear_history" class="ghost-btn small">Clear</button>
+                </div>
+                <div id="history_list" class="history-list">
+                    <p class="empty-hint">No previous generations yet.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
