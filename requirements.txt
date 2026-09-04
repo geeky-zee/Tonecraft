@@ -1,3 +1,4 @@
 Flask
 python-dotenv
-groqflask-cors
+groq
+flask-cors
