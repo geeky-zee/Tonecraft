@@ -184,7 +184,7 @@ generateBtn.addEventListener("click", async () => {
     btnSpinner.classList.remove("hidden");
 
     try {
-        const res = await fetch("http://127.0.0.1:5000/generate", {
+        const res = await fetch("/generate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
